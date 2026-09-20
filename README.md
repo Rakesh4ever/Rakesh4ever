@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/banner/github-header.svg" alt="Rakesh Kumar — Senior Java Backend Engineer. Building scalable, secure, distributed systems." width="100%">
+  <img src="assets/images/hero.jpg" alt="Architecture command center: services connected by cyan data streams around a golden registry tower." width="100%">
 </p>
 
 <h1 align="center">Rakesh Kumar</h1>
@@ -66,44 +66,95 @@
 
 ## Featured Projects
 
-### Spring Boot 3 JWT Security
-JWT-based stateless API authentication with refresh tokens, logout revocation, and role-based authorization.
+Click a card to open the repository or live product.
 
-`Java 21` `Spring Boot 4` `Spring Security` `JWT` `MySQL` `JPA` `OpenAPI`
-
-[View repository →](https://github.com/Rakesh4ever/spring-boot-3-jwt-security)
-
-### Microservices Intercommunication
-Three Spring Boot services: a Eureka registry, a provider, and a consumer that resolves `hello-server` through a load-balanced `RestTemplate`.
-
-`Spring Cloud` `Eureka` `REST` `Ribbon` `JUnit`
-
-[View repository →](https://github.com/Rakesh4ever/micro-services)
-
-### Kafka Producer
-REST endpoint that publishes messages onto an Apache Kafka topic (`kafkaTopic`) after ZooKeeper and the broker are up.
-
-`Spring Kafka` `REST` `Apache Kafka`
-
-[View repository →](https://github.com/Rakesh4ever/KafkaProducer)
-
-### Java Virtual Threads
-Compares launch cost of 100,000 virtual threads vs platform threads using `Thread.ofVirtual()` and `Thread.ofPlatform()`.
-
-`Java` `Project Loom` `Concurrency`
-
-[View repository →](https://github.com/Rakesh4ever/JavaVirtualThreads)
-
-### Reactive Cassandra POC
-Spring WebFlux + WebClient service that persists entities to Apache Cassandra (Java 11, Spring Boot 2.x).
-
-`WebFlux` `WebClient` `Cassandra` `Swagger`
-
-[View repository →](https://github.com/Rakesh4ever/POC)
-
-### Products
-- **[FinanceControl.net](https://financecontrol.net)** — personal-finance platform (budget, SIP, tax, and FX tools).
-- **[Tithi.Live](https://tithi.live)** — city-aware Hindu panchang (tithi, nakshatra, rahu kaal, muhurta).
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="https://github.com/Rakesh4ever/spring-boot-3-jwt-security">
+        <img src="assets/images/jwt-security.jpg" alt="JWT security hall with a gold token on a cyan glass desk and three role doors." width="100%">
+      </a>
+      <br>
+      <strong>Spring Boot 3 JWT Security</strong><br>
+      JWT-based stateless API authentication with refresh tokens, logout revocation, and role-based authorization.<br>
+      <code>Java 21</code> <code>Spring Security</code> <code>JWT</code> <code>MySQL</code><br>
+      <a href="https://github.com/Rakesh4ever/spring-boot-3-jwt-security">View repository →</a>
+    </td>
+    <td width="50%" valign="top">
+      <a href="https://github.com/Rakesh4ever/micro-services">
+        <img src="assets/images/micro-services.jpg" alt="Eureka discovery hall: cyan client desk, golden registry tower, green provider capsule." width="100%">
+      </a>
+      <br>
+      <strong>Microservices Intercommunication</strong><br>
+      Three Spring Boot services: a Eureka registry, a provider, and a consumer that resolves <code>hello-server</code> by name.<br>
+      <code>Spring Cloud</code> <code>Eureka</code> <code>REST</code> <code>Ribbon</code><br>
+      <a href="https://github.com/Rakesh4ever/micro-services">View repository →</a>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="https://github.com/Rakesh4ever/KafkaProducer">
+        <img src="assets/images/kafka.jpg" alt="Cyan event packets streaming along rails into independent service cubes." width="100%">
+      </a>
+      <br>
+      <strong>Kafka Producer</strong><br>
+      REST endpoint that publishes messages onto an Apache Kafka topic after ZooKeeper and the broker are up.<br>
+      <code>Spring Kafka</code> <code>REST</code> <code>Apache Kafka</code><br>
+      <a href="https://github.com/Rakesh4ever/KafkaProducer">View repository →</a>
+    </td>
+    <td width="50%" valign="top">
+      <a href="https://github.com/Rakesh4ever/JavaVirtualThreads">
+        <img src="assets/images/virtual-threads.jpg" alt="Thousands of thin cyan threads weaving through a dark JVM core beside thick steel cables." width="100%">
+      </a>
+      <br>
+      <strong>Java Virtual Threads</strong><br>
+      Compares launch cost of 100,000 virtual threads vs platform threads using <code>Thread.ofVirtual()</code>.<br>
+      <code>Java</code> <code>Project Loom</code> <code>Concurrency</code><br>
+      <a href="https://github.com/Rakesh4ever/JavaVirtualThreads">View repository →</a>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="https://github.com/Rakesh4ever/POC">
+        <img src="assets/images/cassandra.jpg" alt="Silver-blue request waves flowing into a ring of hexagonal storage nodes." width="100%">
+      </a>
+      <br>
+      <strong>Reactive Cassandra POC</strong><br>
+      Spring WebFlux + WebClient service that persists entities to Apache Cassandra.<br>
+      <code>WebFlux</code> <code>WebClient</code> <code>Cassandra</code><br>
+      <a href="https://github.com/Rakesh4ever/POC">View repository →</a>
+    </td>
+    <td width="50%" valign="top">
+      <a href="https://financecontrol.net">
+        <img src="assets/images/financecontrol.jpg" alt="Night-time finance workspace with abstract teal and gold charts on a wide monitor." width="100%">
+      </a>
+      <br>
+      <strong>FinanceControl.net</strong><br>
+      Personal-finance platform for budget, SIP, tax, and FX tools.<br>
+      <a href="https://financecontrol.net">Visit site →</a>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="https://tithi.live">
+        <img src="assets/images/tithi.jpg" alt="Moon over an Indian rooftop with concentric gold and cyan calendar rings." width="100%">
+      </a>
+      <br>
+      <strong>Tithi.Live</strong><br>
+      City-aware Hindu panchang — tithi, nakshatra, rahu kaal, and muhurta.<br>
+      <a href="https://tithi.live">Visit site →</a>
+    </td>
+    <td width="50%" valign="top">
+      <a href="#architecture">
+        <img src="assets/architecture/jwt-security.svg" alt="JWT request path diagram. Click to open the architecture section." width="100%">
+      </a>
+      <br>
+      <strong>Architecture walkthrough</strong><br>
+      Request paths for JWT security and Eureka service discovery, drawn from the actual code.<br>
+      <a href="#architecture">See diagrams →</a>
+    </td>
+  </tr>
+</table>
 
 ---
 
