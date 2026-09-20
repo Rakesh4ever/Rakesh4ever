@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 420" width="980" height="420" role="img" aria-labelledby="t d">
+  <title id="t">Spring Boot 3 JWT Security architecture</title>
+  <desc id="d">Client calls public auth endpoints, then presents a Bearer JWT. JwtAuthenticationFilter checks signature, expiry, and the token table before role-based controllers.</desc>
+  <rect width="980" height="420" fill="#07111f"/>
+  <text x="32" y="38" fill="#e2e8f0" font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="700">spring-boot-3-jwt-security</text>
+  <text x="32" y="62" fill="#7dd3fc" font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="13">JWT authentication · refresh · logout/revocation · USER / MANAGER / ADMIN</text>
+
+  <g font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" text-anchor="middle">
+    <rect x="32" y="96" width="150" height="70" rx="12" fill="#0c2236" stroke="#38bdf8"/>
+    <text x="107" y="126" fill="#e2e8f0" font-size="14" font-weight="700">Client</text>
+    <text x="107" y="146" fill="#94a3b8" font-size="11">curl · Swagger</text>
+
+    <rect x="230" y="96" width="170" height="70" rx="12" fill="#0c2236" stroke="#22d3ee"/>
+    <text x="315" y="126" fill="#e2e8f0" font-size="14" font-weight="700">/api/v1/auth</text>
+    <text x="315" y="146" fill="#94a3b8" font-size="11">register · login · refresh</text>
+
+    <rect x="448" y="96" width="210" height="70" rx="12" fill="#0c2236" stroke="#38bdf8"/>
+    <text x="553" y="126" fill="#e2e8f0" font-size="14" font-weight="700">JwtAuthenticationFilter</text>
+    <text x="553" y="146" fill="#94a3b8" font-size="11">HS256 · expiry · token row</text>
+
+    <rect x="706" y="40" width="242" height="56" rx="12" fill="#0c2236" stroke="#38bdf8"/>
+    <text x="827" y="62" fill="#e2e8f0" font-size="13" font-weight="700">Demo / Books / Users</text>
+    <text x="827" y="80" fill="#94a3b8" font-size="11">any authenticated user</text>
+
+    <rect x="706" y="108" width="242" height="56" rx="12" fill="#0c2236" stroke="#22d3ee"/>
+    <text x="827" y="130" fill="#e2e8f0" font-size="13" font-weight="700">/api/v1/management</text>
+    <text x="827" y="148" fill="#94a3b8" font-size="11">ADMIN or MANAGER</text>
+
+    <rect x="706" y="176" width="242" height="56" rx="12" fill="#0c2236" stroke="#a78bfa"/>
+    <text x="827" y="198" fill="#e2e8f0" font-size="13" font-weight="700">/api/v1/admin</text>
+    <text x="827" y="216" fill="#94a3b8" font-size="11">ADMIN only</text>
+
+    <rect x="230" y="280" width="210" height="80" rx="12" fill="#0c2236" stroke="#38bdf8"/>
+    <text x="335" y="312" fill="#e2e8f0" font-size="14" font-weight="700">MySQL 8</text>
+    <text x="335" y="332" fill="#94a3b8" font-size="11">user · token · book</text>
+    <text x="335" y="348" fill="#64748b" font-size="10">jwt_security · port 8001</text>
+
+    <rect x="490" y="280" width="210" height="80" rx="12" fill="#0c2236" stroke="#38bdf8"/>
+    <text x="595" y="312" fill="#e2e8f0" font-size="14" font-weight="700">SecurityContext</text>
+    <text x="595" y="332" fill="#94a3b8" font-size="11">Role + Permission authorities</text>
+    <text x="595" y="348" fill="#64748b" font-size="10">BCrypt · @PreAuthorize</text>
+  </g>
+
+  <g stroke="#1e3a4c" stroke-width="2" fill="none">
+    <path d="M182 131 H230"/>
+    <path d="M400 131 H448"/>
+    <path d="M658 131 H706"/>
+    <path d="M553 166 V280"/>
+    <path d="M315 166 V280"/>
+    <path d="M595 280 V246 H706"/>
+  </g>
+  <text x="32" y="400" fill="#64748b" font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="12">Access token 1 day · refresh 7 days · logout marks the token row expired and revoked. H2 is used in tests only.</text>
+</svg>
