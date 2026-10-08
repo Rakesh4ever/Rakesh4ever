@@ -13,6 +13,12 @@
   Focused on service discovery, JWT authorization, and cloud-native delivery.
 </p>
 
+<p align="center"><strong>I build the behind-the-scenes software that helps apps handle requests securely, move information between services, and keep working as they grow.</strong></p>
+
+<p align="center">
+  <img src="assets/images/backend-flow.gif" alt="Animated overview: a person's need becomes an API request, backend services work together, and the app returns a useful result." width="100%">
+</p>
+
 <p align="center">
   <a href="https://www.linkedin.com/in/rakesh-kumar"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white" alt="LinkedIn"></a>
   <a href="https://github.com/Rakesh4ever"><img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white" alt="GitHub"></a>
@@ -26,12 +32,12 @@
 
 | Area | What I work on |
 | --- | --- |
-| **Microservices** | Independently deployable Spring Boot services that register with Eureka and call each other by name, not host. |
-| **Application security** | JWT access and refresh tokens, token revocation on logout, and role/permission checks (`USER`, `MANAGER`, `ADMIN`). |
-| **Event-driven systems** | REST endpoints that publish to Apache Kafka topics; RabbitMQ producer to a named exchange. |
-| **Java / JVM** | Modern Java (11/17/21), Spring Boot 3/4, and virtual-thread vs platform-thread execution. |
-| **API design** | Versioned REST APIs, OpenAPI/Swagger, RFC 7807 error bodies, Spring Data JPA. |
-| **Cloud-native delivery** | Docker Compose for local data stores, GitHub Actions to Azure, Maven-based CI. |
+| **Microservices** | Split a large application into smaller services that can find and talk to one another. |
+| **Application security** | Check who is making a request, what they are allowed to do, and whether their sign-in is still valid. |
+| **Event-driven systems** | Pass updates through message queues so different parts of an app can react independently. |
+| **Java / JVM** | Build the server-side logic and tune how it handles many tasks at once. |
+| **API design** | Create clear, documented ways for apps to request information and receive useful responses. |
+| **Cloud-native delivery** | Package, automate, and deploy applications so they are easier to run and update. |
 
 ---
 
