@@ -1,53 +1,73 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 420" width="980" height="420" role="img" aria-labelledby="t d">
-  <title id="t">Spring Boot 3 JWT Security architecture</title>
-  <desc id="d">Client calls public auth endpoints, then presents a Bearer JWT. JwtAuthenticationFilter checks signature, expiry, and the token table before role-based controllers.</desc>
-  <rect width="980" height="420" fill="#07111f"/>
-  <text x="32" y="38" fill="#e2e8f0" font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="700">spring-boot-3-jwt-security</text>
-  <text x="32" y="62" fill="#7dd3fc" font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="13">JWT authentication · refresh · logout/revocation · USER / MANAGER / ADMIN</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 620" width="1100" height="620" role="img" aria-labelledby="title desc">
+  <title id="title">How sign-in and protected requests work</title>
+  <desc id="desc">A two-part guide: the user signs in and receives access and refresh tokens. Later, a request carrying the access token is checked for validity and revocation, then role permissions determine which endpoint can respond.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 10 5 0 10Z" fill="#55c9f2"/></marker>
+    <marker id="arrowGold" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#f3bd67"/></marker>
+    <style>
+      text{font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+      .title{fill:#eff6ff;font-size:24px;font-weight:700}.sub{fill:#a9bfd3;font-size:14px}
+      .section{fill:#7dd3fc;font-size:14px;font-weight:700;letter-spacing:1px}
+      .card{fill:#10243a;stroke:#294760;stroke-width:1.5}.auth{stroke:#38bdf8}.data{stroke:#f3bd67}.gate{stroke:#a78bfa}
+      .head{fill:#f1f5f9;font-size:15px;font-weight:700}.copy{fill:#afc0d2;font-size:12px}
+      .step{fill:#07111f;font-size:12px;font-weight:700;text-anchor:middle}.num{fill:#55c9f2}
+      .line{fill:none;stroke:#55c9f2;stroke-width:2.5;marker-end:url(#arrow)}
+      .return{fill:none;stroke:#f3bd67;stroke-width:2;stroke-dasharray:7 6;marker-end:url(#arrowGold)}
+    </style>
+  </defs>
+  <rect width="1100" height="620" rx="18" fill="#07111f"/>
+  <text x="36" y="44" class="title">From sign-in to a protected response</text>
+  <text x="36" y="70" class="sub">A quick visual guide to what happens when someone signs in and uses the app.</text>
 
-  <g font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" text-anchor="middle">
-    <rect x="32" y="96" width="150" height="70" rx="12" fill="#0c2236" stroke="#38bdf8"/>
-    <text x="107" y="126" fill="#e2e8f0" font-size="14" font-weight="700">Client</text>
-    <text x="107" y="146" fill="#94a3b8" font-size="11">curl · Swagger</text>
+  <text x="36" y="119" class="section">1 · SIGN IN ONCE</text>
+  <g>
+    <rect x="36" y="140" width="210" height="86" rx="14" class="card auth"/>
+    <circle cx="59" cy="163" r="13" class="num"/><text x="59" y="167" class="step">1</text>
+    <text x="80" y="166" class="head">You sign in</text>
+    <text x="54" y="194" class="copy">Send your credentials to</text><text x="54" y="211" class="copy">the sign-in endpoint.</text>
 
-    <rect x="230" y="96" width="170" height="70" rx="12" fill="#0c2236" stroke="#22d3ee"/>
-    <text x="315" y="126" fill="#e2e8f0" font-size="14" font-weight="700">/api/v1/auth</text>
-    <text x="315" y="146" fill="#94a3b8" font-size="11">register · login · refresh</text>
+    <rect x="350" y="140" width="250" height="86" rx="14" class="card auth"/>
+    <circle cx="373" cy="163" r="13" class="num"/><text x="373" y="167" class="step">2</text>
+    <text x="394" y="166" class="head">The app checks them</text>
+    <text x="368" y="194" class="copy">It verifies your account and</text><text x="368" y="211" class="copy">creates signed tokens.</text>
 
-    <rect x="448" y="96" width="210" height="70" rx="12" fill="#0c2236" stroke="#38bdf8"/>
-    <text x="553" y="126" fill="#e2e8f0" font-size="14" font-weight="700">JwtAuthenticationFilter</text>
-    <text x="553" y="146" fill="#94a3b8" font-size="11">HS256 · expiry · token row</text>
-
-    <rect x="706" y="40" width="242" height="56" rx="12" fill="#0c2236" stroke="#38bdf8"/>
-    <text x="827" y="62" fill="#e2e8f0" font-size="13" font-weight="700">Demo / Books / Users</text>
-    <text x="827" y="80" fill="#94a3b8" font-size="11">any authenticated user</text>
-
-    <rect x="706" y="108" width="242" height="56" rx="12" fill="#0c2236" stroke="#22d3ee"/>
-    <text x="827" y="130" fill="#e2e8f0" font-size="13" font-weight="700">/api/v1/management</text>
-    <text x="827" y="148" fill="#94a3b8" font-size="11">ADMIN or MANAGER</text>
-
-    <rect x="706" y="176" width="242" height="56" rx="12" fill="#0c2236" stroke="#a78bfa"/>
-    <text x="827" y="198" fill="#e2e8f0" font-size="13" font-weight="700">/api/v1/admin</text>
-    <text x="827" y="216" fill="#94a3b8" font-size="11">ADMIN only</text>
-
-    <rect x="230" y="280" width="210" height="80" rx="12" fill="#0c2236" stroke="#38bdf8"/>
-    <text x="335" y="312" fill="#e2e8f0" font-size="14" font-weight="700">MySQL 8</text>
-    <text x="335" y="332" fill="#94a3b8" font-size="11">user · token · book</text>
-    <text x="335" y="348" fill="#64748b" font-size="10">jwt_security · port 8001</text>
-
-    <rect x="490" y="280" width="210" height="80" rx="12" fill="#0c2236" stroke="#38bdf8"/>
-    <text x="595" y="312" fill="#e2e8f0" font-size="14" font-weight="700">SecurityContext</text>
-    <text x="595" y="332" fill="#94a3b8" font-size="11">Role + Permission authorities</text>
-    <text x="595" y="348" fill="#64748b" font-size="10">BCrypt · @PreAuthorize</text>
+    <rect x="704" y="140" width="350" height="86" rx="14" class="card data"/>
+    <circle cx="727" cy="163" r="13" fill="#f3bd67"/><text x="727" y="167" class="step">3</text>
+    <text x="748" y="166" class="head">You receive two tokens</text>
+    <text x="722" y="194" class="copy">Access token: send it with requests</text>
+    <text x="722" y="211" class="copy">Refresh token: renew access without signing in.</text>
+    <path d="M246 183H342" class="line"/><path d="M600 183H696" class="line"/><path d="M880 226V246H140V232" class="return"/>
   </g>
 
-  <g stroke="#1e3a4c" stroke-width="2" fill="none">
-    <path d="M182 131 H230"/>
-    <path d="M400 131 H448"/>
-    <path d="M658 131 H706"/>
-    <path d="M553 166 V280"/>
-    <path d="M315 166 V280"/>
-    <path d="M595 280 V246 H706"/>
+  <text x="36" y="280" class="section">2 · EACH TIME YOU REQUEST A PROTECTED PAGE</text>
+  <g>
+    <rect x="36" y="303" width="190" height="94" rx="14" class="card auth"/>
+    <circle cx="59" cy="327" r="13" class="num"/><text x="59" y="331" class="step">4</text>
+    <text x="80" y="330" class="head">Send your request</text>
+    <text x="54" y="359" class="copy">The access token travels</text><text x="54" y="377" class="copy">with the request.</text>
+
+    <rect x="280" y="303" width="220" height="94" rx="14" class="card auth"/>
+    <circle cx="303" cy="327" r="13" class="num"/><text x="303" y="331" class="step">5</text>
+    <text x="324" y="330" class="head">Check the token</text>
+    <text x="298" y="359" class="copy">Confirm it is genuine and</text><text x="298" y="377" class="copy">has not expired.</text>
+
+    <rect x="554" y="303" width="220" height="94" rx="14" class="card data"/>
+    <circle cx="577" cy="327" r="13" fill="#f3bd67"/><text x="577" y="331" class="step">6</text>
+    <text x="598" y="330" class="head">Check sign-in status</text>
+    <text x="572" y="359" class="copy">Look up the token record to</text><text x="572" y="377" class="copy">confirm it was not revoked.</text>
+
+    <rect x="828" y="303" width="226" height="94" rx="14" class="card gate"/>
+    <circle cx="851" cy="327" r="13" fill="#c4b5fd"/><text x="851" y="331" class="step">7</text>
+    <text x="872" y="330" class="head">Check your role</text>
+    <text x="846" y="359" class="copy">Allow access only when your</text><text x="846" y="377" class="copy">role has the right permission.</text>
+
+    <path d="M226 350H272" class="line"/><path d="M500 350H546" class="line"/><path d="M774 350H820" class="line"/>
   </g>
-  <text x="32" y="400" fill="#64748b" font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="12">Access token 1 day · refresh 7 days · logout marks the token row expired and revoked. H2 is used in tests only.</text>
+
+  <path d="M941 397V435H490V452" class="line"/>
+  <rect x="270" y="452" width="440" height="76" rx="14" class="card auth"/>
+  <text x="490" y="481" class="head" text-anchor="middle">The right part of the app responds</text>
+  <text x="490" y="505" class="copy" text-anchor="middle">Regular pages · Manager tools · Admin tools</text>
+  <text x="36" y="572" class="sub">If a check fails, access is denied. Logging out revokes the token so it cannot be reused.</text>
+  <text x="36" y="596" fill="#6f879d" font-size="11">Project details: Spring Security · HS256 JWT · MySQL token records · USER / MANAGER / ADMIN</text>
 </svg>

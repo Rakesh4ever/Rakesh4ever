@@ -171,24 +171,21 @@ Two public repos with the clearest request paths. Components match the code and 
 ### JWT security request path
 
 <p align="center">
-  <img src="assets/architecture/jwt-security.svg" alt="Client authenticates, then JwtAuthenticationFilter validates the Bearer token against MySQL before role-gated controllers." width="100%">
+  <img src="assets/architecture/jwt-security.svg" alt="Friendly seven-step diagram: sign in, receive access and refresh tokens, send the access token with a request, validate it and check revocation in MySQL, then allow or deny access based on role." width="100%">
 </p>
 
 ```mermaid
-sequenceDiagram
-    participant Caller
-    participant Auth as /api/v1/auth
-    participant Filter as JwtAuthenticationFilter
-    participant DB as MySQL (user + token)
-    participant API as Secured controller
-
-    Caller->>Auth: POST /register or /authenticate
-    Auth->>DB: save user, store access token
-    Auth-->>Caller: access_token + refresh_token
-    Caller->>Filter: GET secured path + Bearer token
-    Filter->>DB: load user, confirm token not revoked
-    Filter->>API: SecurityContext with role authorities
-    API-->>Caller: 200 or 403
+flowchart LR
+    A[Sign in] --> B[App checks account]
+    B --> C[Receive access + refresh tokens]
+    C --> D[Request a protected page with access token]
+    D --> E{Token genuine, current, and active?}
+    E -->|No| F[Access denied]
+    E -->|Yes| G{Does your role allow this?}
+    G -->|No| F
+    G -->|Yes| H[Requested page or feature responds]
+    B -. account and token records .-> DB[(MySQL)]
+    E -. check revocation .-> DB
 ```
 
 ### Service discovery call path
