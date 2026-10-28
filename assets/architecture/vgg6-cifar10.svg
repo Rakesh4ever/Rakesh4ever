@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 580" width="1100" height="580" role="img" aria-labelledby="title desc">
+  <title id="title">VGG6 on CIFAR-10 architecture and training pipeline</title>
+  <desc id="desc">Six-stage visual guide to the VGG6 Convolutional Neural Network on CIFAR-10: input normalization and augmentation, two convolutional blocks (64 and 128 filters), dense classifier head (8192 to 256 to 10 classes), and Nadam + Weights &amp; Biases hyperparameter optimization achieving 88.94% validation and 88.45% test accuracy.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 10 5 0 10Z" fill="#55c9f2"/></marker>
+    <marker id="arrowGold" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#f3bd67"/></marker>
+    <style>
+      text{font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+      .title{fill:#eff6ff;font-size:24px;font-weight:700}.sub{fill:#a9bfd3;font-size:14px}
+      .section{fill:#7dd3fc;font-size:14px;font-weight:700;letter-spacing:1px}
+      .card{fill:#10243a;stroke:#294760;stroke-width:1.5}.conv{stroke:#38bdf8}.data{stroke:#f3bd67}.head-card{stroke:#a78bfa}.opt{stroke:#34d399}
+      .head{fill:#f1f5f9;font-size:15px;font-weight:700}.copy{fill:#afc0d2;font-size:12px}.mono{fill:#7dd3fc;font-size:11.5px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
+      .step{fill:#07111f;font-size:12px;font-weight:700;text-anchor:middle}.num{fill:#55c9f2}
+      .line{fill:none;stroke:#55c9f2;stroke-width:2.5;marker-end:url(#arrow)}
+      .feedback{fill:none;stroke:#f3bd67;stroke-width:2;stroke-dasharray:7 6;marker-end:url(#arrowGold)}
+    </style>
+  </defs>
+  <rect width="1100" height="580" rx="18" fill="#07111f"/>
+  <text x="36" y="44" class="title">VGG6 on CIFAR-10 — Architecture &amp; Training Pipeline</text>
+  <text x="36" y="70" class="sub">Six-layer CNN (4 Conv2D + 2 Dense) with Z-score standardization, data augmentation, and W&amp;B sweeps.</text>
+
+  <text x="36" y="116" class="section">1 · DATA PIPELINE &amp; CONVOLUTIONAL BACKBONE (4 WEIGHT LAYERS)</text>
+  <g>
+    <rect x="36" y="136" width="300" height="104" rx="14" class="card data"/>
+    <circle cx="59" cy="160" r="13" fill="#f3bd67"/><text x="59" y="164" class="step">1</text>
+    <text x="80" y="163" class="head">CIFAR-10 Input &amp; Augmentation</text>
+    <text x="54" y="188" class="copy">32×32×3 RGB · 45k train / 5k val / 10k test</text>
+    <text x="54" y="206" class="copy">Channel-wise Z-score standardization</text>
+    <text x="54" y="224" class="mono">ReflectPad(4) → RandomCrop(32×32) → Flip</text>
+
+    <rect x="400" y="136" width="300" height="104" rx="14" class="card conv"/>
+    <circle cx="423" cy="160" r="13" class="num"/><text x="423" y="164" class="step">2</text>
+    <text x="444" y="163" class="head">Conv Block 1 (Layers 1–2)</text>
+    <text x="418" y="188" class="copy">2× [Conv2D(64, 3×3) + BatchNorm + GELU]</text>
+    <text x="418" y="206" class="copy">He normal init · L2 weight decay (1e-4)</text>
+    <text x="418" y="224" class="mono">MaxPool(2×2) + Dropout(0.2) → 16×16×64</text>
+
+    <rect x="764" y="136" width="300" height="104" rx="14" class="card conv"/>
+    <circle cx="787" cy="160" r="13" class="num"/><text x="787" y="164" class="step">3</text>
+    <text x="808" y="163" class="head">Conv Block 2 (Layers 3–4)</text>
+    <text x="782" y="188" class="copy">2× [Conv2D(128, 3×3) + BatchNorm + GELU]</text>
+    <text x="782" y="206" class="copy">Doubles filter depth for mid-level patterns</text>
+    <text x="782" y="224" class="mono">MaxPool(2×2) + Dropout(0.2) → 8×8×128</text>
+
+    <path d="M336 188H392" class="line"/>
+    <path d="M700 188H756" class="line"/>
+  </g>
+
+  <text x="36" y="286" class="section">2 · CLASSIFIER HEAD (2 WEIGHT LAYERS), OPTIMIZATION &amp; EVALUATION</text>
+  <g>
+    <rect x="36" y="306" width="300" height="104" rx="14" class="card head-card"/>
+    <circle cx="59" cy="330" r="13" fill="#c4b5fd"/><text x="59" y="334" class="step">4</text>
+    <text x="80" y="333" class="head">Dense Classifier (Layer 5)</text>
+    <text x="54" y="358" class="copy">Flatten 8×8×128 → 8,192 feature vector</text>
+    <text x="54" y="376" class="copy">Dense(256) + BatchNorm + GELU</text>
+    <text x="54" y="394" class="mono">Dropout(0.3) + L2(1e-4) → 256 units</text>
+
+    <rect x="400" y="306" width="300" height="104" rx="14" class="card opt"/>
+    <circle cx="423" cy="330" r="13" fill="#34d399"/><text x="423" y="334" class="step">5</text>
+    <text x="444" y="333" class="head">Softmax Output (Layer 6)</text>
+    <text x="418" y="358" class="copy">Dense(10, Softmax) class probabilities</text>
+    <text x="418" y="376" class="copy">Best Validation Accuracy: 88.94%</text>
+    <text x="418" y="394" class="mono">Final Held-Out Test Top-1: 88.45%</text>
+
+    <rect x="764" y="306" width="300" height="104" rx="14" class="card data"/>
+    <circle cx="787" cy="330" r="13" fill="#f3bd67"/><text x="787" y="334" class="step">6</text>
+    <text x="808" y="333" class="head">Optimization &amp; W&amp;B Sweeps</text>
+    <text x="782" y="358" class="copy">Nadam (lr=1e-3) + ReduceLROnPlateau</text>
+    <text x="782" y="376" class="copy">Evaluated 6 activations × 6 optimizers</text>
+    <text x="782" y="394" class="mono">Batch 128 · 80 Epochs · Seed 42</text>
+
+    <path d="M914 240V268H186V298" class="line"/>
+    <path d="M336 358H392" class="line"/>
+    <path d="M764 358H708" class="feedback"/>
+  </g>
+
+  <rect x="210" y="442" width="680" height="68" rx="14" class="card conv"/>
+  <text x="550" y="470" class="head" text-anchor="middle">Modular Reproducible Architecture: src/dataset.py · src/model.py · src/train.py · src/evaluate.py · src/sweep.py</text>
+  <text x="550" y="493" class="copy" text-anchor="middle">Interactive Google Colab driver.ipynb + CLI execution · Checkpoints (.keras) · Automated W&amp;B parallel coordinates</text>
+
+  <text x="36" y="542" class="sub">Best config: GELU + Nadam (1e-3) + BatchNorm + Dropout(0.2/0.3) + L2(1e-4) achieves 88.94% val / 88.45% test accuracy.</text>
+  <text x="36" y="564" fill="#6f879d" font-size="11">Project details: IIT Madras CS6886W · Python 3.10+ · TensorFlow 2.15+ / Keras · Weights &amp; Biases · NumPy · Matplotlib</text>
+</svg>
+

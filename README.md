@@ -5,12 +5,12 @@
 <h1 align="center">Rakesh Kumar</h1>
 
 <p align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=20&pause=1200&color=38BDF8&center=true&vCenter=true&width=640&height=32&lines=Senior+Java+Backend+Engineer;Microservices+Engineer;Distributed+Systems+Engineer;Cloud-Native+Developer" alt="Senior Java Backend Engineer">
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=20&pause=1200&color=38BDF8&center=true&vCenter=true&width=640&height=32&lines=Senior+Java+Backend+Engineer;Microservices+Engineer;Distributed+Systems+Engineer;Cloud-Native+Developer;Deep+Learning+%26+ML+Systems" alt="Senior Java Backend Engineer">
 </p>
 
 <p align="center">
-  10+ years building Java backend systems — Spring Boot microservices, event-driven services, and secure REST APIs.<br>
-  Focused on service discovery, JWT authorization, and cloud-native delivery.
+  10+ years building Java backend systems — Spring Boot microservices, event-driven services, secure REST APIs, and deep learning pipelines.<br>
+  Focused on service discovery, JWT authorization, cloud-native delivery, and reproducible ML systems.
 </p>
 
 <p align="center"><strong>I build the behind-the-scenes software that helps apps handle requests securely, move information between services, and keep working as they grow.</strong></p>
@@ -38,16 +38,20 @@
 | **Java / JVM** | Build the server-side logic and tune how it handles many tasks at once. |
 | **API design** | Create clear, documented ways for apps to request information and receive useful responses. |
 | **Cloud-native delivery** | Package, automate, and deploy applications so they are easier to run and update. |
+| **Deep learning & ML systems** | Design, train, and evaluate convolutional neural networks with reproducible pipelines and automated hyperparameter sweeps. |
 
 ---
 
 ## Technology Stack
 
 **Languages**  
-`Java 11 / 17 / 21` · `TypeScript` · `C`
+`Java 11 / 17 / 21` · `Python 3.10+` · `TypeScript` · `C`
 
 **Backend**  
 `Spring Boot` · `Spring Security` · `Spring WebFlux` · `Spring Data JPA` · `Hibernate`
+
+**Deep learning & data science**  
+`TensorFlow / Keras` · `Convolutional Neural Networks (VGG6)` · `Weights & Biases (W&B)` · `NumPy` · `Matplotlib` · `Google Colab (CUDA / T4 GPU)`
 
 **Architecture & messaging**  
 `Microservices` · `Netflix Eureka` · `REST` · `Apache Kafka` · `RabbitMQ` · `SOAP / WSDL`
@@ -65,7 +69,7 @@
 `JUnit 5` · `Mockito` · `MockMvc` · `springdoc-openapi`
 
 <p align="center">
-  <img src="https://skillicons.dev/icons?i=java,spring,kafka,rabbitmq,mysql,docker,azure,angular,maven,git,githubactions" alt="Java, Spring, Kafka, RabbitMQ, MySQL, Docker, Azure, Angular, Maven, Git, GitHub Actions">
+  <img src="https://skillicons.dev/icons?i=java,spring,python,tensorflow,kafka,rabbitmq,mysql,docker,azure,angular,maven,git,githubactions" alt="Java, Spring, Python, TensorFlow, Kafka, RabbitMQ, MySQL, Docker, Azure, Angular, Maven, Git, GitHub Actions">
 </p>
 
 ---
@@ -131,6 +135,18 @@ Click a card to open the repository or live product.
       <a href="https://github.com/Rakesh4ever/POC">View repository →</a>
     </td>
     <td width="50%" valign="top">
+      <a href="https://github.com/Rakesh4ever/iitm-cs6886w-vgg6-cifar10">
+        <img src="assets/images/vgg6-cifar10.jpg" alt="Six progressive cyan glass convolutional tensor layers connected by light streams to ten golden CIFAR-10 classification capsules." width="100%">
+      </a>
+      <br>
+      <strong>VGG6 CNN on CIFAR-10 (IITM CS6886W)</strong><br>
+      Modular 6-layer CNN in TensorFlow/Keras with channel-wise Z-score standardization, data augmentation, and W&amp;B sweeps across 6 activations and 6 optimizers (88.94% val / 88.45% test accuracy).<br>
+      <code>Python</code> <code>TensorFlow / Keras</code> <code>VGG6 CNN</code> <code>W&amp;B</code> <code>CIFAR-10</code><br>
+      <a href="https://github.com/Rakesh4ever/iitm-cs6886w-vgg6-cifar10">View repository →</a>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
       <a href="https://financecontrol.net">
         <img src="assets/images/financecontrol.jpg" alt="Night-time finance workspace with abstract teal and gold charts on a wide monitor." width="100%">
       </a>
@@ -139,8 +155,6 @@ Click a card to open the repository or live product.
       Personal-finance platform for budget, SIP, tax, and FX tools.<br>
       <a href="https://financecontrol.net">Visit site →</a>
     </td>
-  </tr>
-  <tr>
     <td width="50%" valign="top">
       <a href="https://tithi.live">
         <img src="assets/images/tithi.jpg" alt="Moon over an Indian rooftop with concentric gold and cyan calendar rings." width="100%">
@@ -150,15 +164,6 @@ Click a card to open the repository or live product.
       City-aware Hindu panchang — tithi, nakshatra, rahu kaal, and muhurta.<br>
       <a href="https://tithi.live">Visit site →</a>
     </td>
-    <td width="50%" valign="top">
-      <a href="#architecture">
-        <img src="assets/architecture/jwt-security.svg" alt="JWT request path diagram. Click to open the architecture section." width="100%">
-      </a>
-      <br>
-      <strong>Architecture walkthrough</strong><br>
-      Request paths for JWT security and Eureka service discovery, drawn from the actual code.<br>
-      <a href="#architecture">See diagrams →</a>
-    </td>
   </tr>
 </table>
 
@@ -166,7 +171,7 @@ Click a card to open the repository or live product.
 
 ## Architecture
 
-Two public repos with the clearest request paths. Components match the code and READMEs — nothing invented.
+Three public repos with the clearest request and training paths. Components match the code and READMEs — nothing invented.
 
 ### JWT security request path
 
@@ -209,6 +214,24 @@ sequenceDiagram
     Client-->>Caller: Hello-from-server
 ```
 
+### VGG6 CNN architecture & training pipeline
+
+<p align="center">
+  <img src="assets/architecture/vgg6-cifar10.svg" alt="Six-stage diagram of the VGG6 CNN on CIFAR-10: Z-score normalization and augmentation, Conv Block 1 (64 filters), Conv Block 2 (128 filters), Flatten + Dense(256) classifier head, Dense(10, Softmax) output, and Nadam + W&B hyperparameter optimization." width="100%">
+</p>
+
+```mermaid
+flowchart LR
+    A["CIFAR-10 Input (32×32×3)"] --> B["Z-Score Norm + ReflectPad / Crop / Flip"]
+    B --> C["Block 1: 2× Conv2D(64) + BN + GELU → MaxPool + Dropout(0.2)"]
+    C --> D["Block 2: 2× Conv2D(128) + BN + GELU → MaxPool + Dropout(0.2)"]
+    D --> E["Flatten (8,192) → Dense(256) + BN + GELU + Dropout(0.3)"]
+    E --> F["Dense(10, Softmax) → 88.94% Val / 88.45% Test"]
+    W["Nadam (lr=1e-3) + ReduceLROnPlateau + W&B Sweeps"] -. tunes & logs .-> C
+    W -. tunes & logs .-> D
+    W -. tunes & logs .-> E
+```
+
 ---
 
 ## GitHub Activity
@@ -230,6 +253,7 @@ sequenceDiagram
 
 ## Currently Exploring
 
+- Deep learning systems engineering, CNN architectures, and hyperparameter optimization (IIT Madras CS6886W)
 - Modern Java and JVM execution models (virtual threads, Spring Boot 4)
 - Distributed-system design around service discovery and messaging
 - Cloud-native backend delivery
