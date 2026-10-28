@@ -1,47 +1,113 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 420" width="980" height="420" role="img" aria-labelledby="t d">
-  <title id="t">Microservices intercommunication architecture</title>
-  <desc id="d">hello-client looks up hello-server in Eureka, then calls it by service name through a load-balanced RestTemplate.</desc>
-  <rect width="980" height="420" fill="#07111f"/>
-  <text x="32" y="38" fill="#e2e8f0" font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="700">micro-services</text>
-  <text x="32" y="62" fill="#7dd3fc" font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="13">Calls by Eureka service name, not by hardcoded host and port</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 500" width="1100" height="500" role="img" aria-labelledby="t d">
+  <title id="t">Microservices intercommunication architecture with animated Eureka discovery and Ribbon routing</title>
+  <desc id="d">hello-client (:8072) looks up hello-server (:8071) in Netflix Eureka (:8070), then calls it by virtual service name through a @LoadBalanced RestTemplate.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 10 5 0 10Z" fill="#55c9f2"/></marker>
+    <marker id="arrowGold" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#f3bd67"/></marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#34d399"/></marker>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3.5" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <style>
+      text{font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+      .title{fill:#eff6ff;font-size:23px;font-weight:700}
+      .sub{fill:#7dd3fc;font-size:13.5px}
+      .card{fill:#0c2236;stroke-width:1.8}
+      .head{fill:#f1f5f9;font-size:15px;font-weight:700}
+      .copy{fill:#94a3b8;font-size:12px}
+      .mono{fill:#7dd3fc;font-size:11.5px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+      .step{fill:#07111f;font-size:11.5px;font-weight:700;text-anchor:middle}
+      .req-line{fill:none;stroke:#38bdf8;stroke-width:2.5;marker-end:url(#arrow)}
+      .disc-line{fill:none;stroke:#f3bd67;stroke-width:2;stroke-dasharray:6 5;marker-end:url(#arrowGold)}
+      .res-line{fill:none;stroke:#34d399;stroke-width:2.2;stroke-dasharray:5 5;marker-end:url(#arrowGreen)}
+    </style>
+  </defs>
 
-  <g font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" text-anchor="middle">
-    <rect x="40" y="170" width="160" height="88" rx="12" fill="#0c2236" stroke="#38bdf8"/>
-    <text x="120" y="204" fill="#e2e8f0" font-size="15" font-weight="700">Caller</text>
-    <text x="120" y="226" fill="#94a3b8" font-size="12">GET /rest/hello/client</text>
+  <rect width="1100" height="500" rx="18" fill="#07111f"/>
+  <text x="36" y="42" class="title">Microservices Intercommunication — Eureka Discovery &amp; Client-Side Load Balancing</text>
+  <text x="36" y="66" class="sub">Zero hardcoded hostnames or ports: hello-client (:8072) resolves hello-server (:8071) dynamically via Eureka (:8070)</text>
 
-    <rect x="280" y="170" width="190" height="88" rx="12" fill="#0c2236" stroke="#22d3ee"/>
-    <text x="375" y="200" fill="#e2e8f0" font-size="15" font-weight="700">hello-client</text>
-    <text x="375" y="220" fill="#94a3b8" font-size="12">:8072 · consumer</text>
-    <text x="375" y="240" fill="#64748b" font-size="11">@LoadBalanced RestTemplate</text>
-
-    <rect x="390" y="48" width="210" height="80" rx="12" fill="#0c2236" stroke="#fbbf24"/>
-    <text x="495" y="78" fill="#e2e8f0" font-size="15" font-weight="700">eureka-service</text>
-    <text x="495" y="100" fill="#94a3b8" font-size="12">:8070 · registry dashboard</text>
-
-    <rect x="560" y="170" width="190" height="88" rx="12" fill="#0c2236" stroke="#34d399"/>
-    <text x="655" y="200" fill="#e2e8f0" font-size="15" font-weight="700">hello-server</text>
-    <text x="655" y="220" fill="#94a3b8" font-size="12">:8071 · provider</text>
-    <text x="655" y="240" fill="#64748b" font-size="11">GET /rest/hello/server</text>
-
-    <rect x="790" y="170" width="150" height="88" rx="12" fill="#0c2236" stroke="#38bdf8"/>
-    <text x="865" y="204" fill="#e2e8f0" font-size="15" font-weight="700">Response</text>
-    <text x="865" y="226" fill="#94a3b8" font-size="12">Hello-from-server</text>
+  <!-- Eureka Registry Node (Top Center) -->
+  <g>
+    <rect x="390" y="92" width="320" height="92" rx="14" class="card" stroke="#fbbf24"/>
+    <circle cx="416" cy="118" r="12" fill="#fbbf24"/><text x="416" y="122" class="step">1</text>
+    <text x="436" y="122" class="head">eureka-service (:8070)</text>
+    <text x="410" y="146" class="copy">@EnableEurekaServer · Service Registry Dashboard</text>
+    <text x="410" y="166" class="mono">Tracks instances: HELLO-CLIENT &amp; HELLO-SERVER</text>
   </g>
 
-  <g stroke="#1e3a4c" stroke-width="2" fill="none">
-    <path d="M200 214 H280"/>
-    <path d="M470 170 V128"/>
-    <path d="M375 128 H390"/>
-    <path d="M600 128 H655 V170"/>
-    <path d="M470 214 H560"/>
-    <path d="M750 214 H790"/>
+  <!-- Caller Node -->
+  <g>
+    <rect x="36" y="242" width="185" height="96" rx="14" class="card" stroke="#38bdf8"/>
+    <circle cx="60" cy="268" r="12" fill="#38bdf8"/><text x="60" y="272" class="step">2</text>
+    <text x="80" y="272" class="head">API Caller</text>
+    <text x="54" y="296" class="copy">Sends HTTP request</text>
+    <text x="54" y="316" class="mono">GET /rest/hello/client</text>
   </g>
 
-  <g font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" fill="#94a3b8" font-size="11">
-    <text x="40" y="310">1. Client asks Eureka: where is hello-server?</text>
-    <text x="40" y="332">2. Registry returns the instance (localhost:8071).</text>
-    <text x="40" y="354">3. Client calls http://hello-server/rest/hello/server — Ribbon resolves the virtual hostname.</text>
-    <text x="40" y="388" fill="#64748b">Spring Boot 2.1.3 · Spring Cloud Greenwich.SR1 · Java 8 bytecode on JDK 11 · JUnit 4 + MockMvc.</text>
+  <!-- hello-client Node -->
+  <g>
+    <rect x="290" y="242" width="235" height="96" rx="14" class="card" stroke="#22d3ee"/>
+    <circle cx="314" cy="268" r="12" fill="#22d3ee"/><text x="314" y="272" class="step">3</text>
+    <text x="334" y="272" class="head">hello-client (:8072)</text>
+    <text x="308" y="296" class="copy">@EnableDiscoveryClient · Consumer</text>
+    <text x="308" y="316" class="mono">@LoadBalanced RestTemplate</text>
   </g>
+
+  <!-- hello-server Node -->
+  <g>
+    <rect x="600" y="242" width="235" height="96" rx="14" class="card" stroke="#34d399"/>
+    <circle cx="624" cy="268" r="12" fill="#34d399"/><text x="624" y="272" class="step">4</text>
+    <text x="644" y="272" class="head">hello-server (:8071)</text>
+    <text x="618" y="296" class="copy">@EnableDiscoveryClient · Provider</text>
+    <text x="618" y="316" class="mono">GET /rest/hello/server</text>
+  </g>
+
+  <!-- Response Node -->
+  <g>
+    <rect x="900" y="242" width="164" height="96" rx="14" class="card" stroke="#a78bfa"/>
+    <circle cx="924" cy="268" r="12" fill="#c4b5fd"/><text x="924" y="272" class="step">5</text>
+    <text x="944" y="272" class="head">Response</text>
+    <text x="918" y="296" class="copy">Relayed to caller</text>
+    <text x="918" y="316" class="mono">"Hello-from-server"</text>
+  </g>
+
+  <!-- Discovery & Heartbeat Lines -->
+  <path d="M407 242V192" class="disc-line"/>
+  <path d="M717 242V192" class="disc-line"/>
+  <text x="310" y="218" fill="#fbbf24" font-size="11">Lookup hello-server</text>
+  <text x="728" y="218" fill="#fbbf24" font-size="11">Register :8071</text>
+
+  <!-- Request & Response Lines -->
+  <path d="M221 282H282" class="req-line"/>
+  <path d="M525 282H592" class="req-line"/>
+  <path d="M835 282H892" class="res-line"/>
+
+  <!-- Animated Data Packets -->
+  <circle r="4.5" fill="#38bdf8" filter="url(#glow)">
+    <animateMotion dur="1.5s" repeatCount="indefinite" path="M221 282H282"/>
+  </circle>
+  <circle r="4.5" fill="#fbbf24" filter="url(#glow)">
+    <animateMotion dur="1.8s" begin="0.3s" repeatCount="indefinite" path="M407 242V192"/>
+  </circle>
+  <circle r="4.5" fill="#fbbf24" filter="url(#glow)">
+    <animateMotion dur="1.8s" begin="0.9s" repeatCount="indefinite" path="M717 242V192"/>
+  </circle>
+  <circle r="4.5" fill="#22d3ee" filter="url(#glow)">
+    <animateMotion dur="1.6s" begin="0.6s" repeatCount="indefinite" path="M525 282H592"/>
+  </circle>
+  <circle r="4.5" fill="#34d399" filter="url(#glow)">
+    <animateMotion dur="1.5s" begin="1.1s" repeatCount="indefinite" path="M835 282H892"/>
+  </circle>
+
+  <!-- Summary Footer Card -->
+  <rect x="36" y="368" width="1028" height="72" rx="12" fill="#0c1e33" stroke="#233f5d" stroke-width="1.5"/>
+  <text x="56" y="394" fill="#e2e8f0" font-size="13" font-weight="700">1. Registry Heartbeat: <tspan fill="#94a3b8" font-weight="400">Both microservices register with Eureka (:8070) on startup.</tspan>   2. Virtual Host Resolution: <tspan fill="#94a3b8" font-weight="400">hello-client queries Eureka for "hello-server".</tspan></text>
+  <text x="56" y="418" fill="#e2e8f0" font-size="13" font-weight="700">3. Client-Side Load Balancing: <tspan fill="#94a3b8" font-weight="400">Ribbon intercepts http://hello-server/rest/hello/server, routes to localhost:8071, and returns "Hello-from-server".</tspan></text>
+
+  <text x="36" y="470" fill="#6f879d" font-size="11.5">Project details: Spring Boot 2.1.3 · Spring Cloud Greenwich.SR1 · Netflix Eureka · Ribbon · @LoadBalanced RestTemplate · JUnit 4 + MockMvc</text>
 </svg>

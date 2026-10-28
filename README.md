@@ -88,7 +88,7 @@ Click a card to open the repository or live product.
       <strong>Spring Boot 3 JWT Security</strong><br>
       JWT-based stateless API authentication with refresh tokens, logout revocation, and role-based authorization.<br>
       <code>Java 21</code> <code>Spring Security</code> <code>JWT</code> <code>MySQL</code><br>
-      <a href="https://github.com/Rakesh4ever/spring-boot-3-jwt-security">View repository →</a>
+      <a href="https://github.com/Rakesh4ever/spring-boot-3-jwt-security">View repository →</a> · <a href="#jwt-security-flow">Execution flow ↓</a>
     </td>
     <td width="50%" valign="top">
       <a href="https://github.com/Rakesh4ever/micro-services">
@@ -98,7 +98,7 @@ Click a card to open the repository or live product.
       <strong>Microservices Intercommunication</strong><br>
       Three Spring Boot services: a Eureka registry, a provider, and a consumer that resolves <code>hello-server</code> by name.<br>
       <code>Spring Cloud</code> <code>Eureka</code> <code>REST</code> <code>Ribbon</code><br>
-      <a href="https://github.com/Rakesh4ever/micro-services">View repository →</a>
+      <a href="https://github.com/Rakesh4ever/micro-services">View repository →</a> · <a href="#microservices-flow">Execution flow ↓</a>
     </td>
   </tr>
   <tr>
@@ -173,7 +173,13 @@ Click a card to open the repository or live product.
 
 Three public repos with the clearest request and training paths. Components match the code and READMEs — nothing invented.
 
-### JWT security request path
+<a id="jwt-security-flow"></a>
+
+### JWT security request path & animated execution flow
+
+<p align="center">
+  <img src="assets/images/jwt-execution-flow.gif" alt="Animated 5-stage Spring Boot 3 JWT Security execution flow: Sign-In Request, Mint HS256 JWTs, JWT Filter Gate, MySQL Revocation Check, and RBAC Authorization." width="100%">
+</p>
 
 <p align="center">
   <img src="assets/architecture/jwt-security.svg" alt="Friendly seven-step diagram: sign in, receive access and refresh tokens, send the access token with a request, validate it and check revocation in MySQL, then allow or deny access based on role." width="100%">
@@ -193,7 +199,27 @@ flowchart LR
     E -. check revocation .-> DB
 ```
 
-### Service discovery call path
+<details>
+<summary><strong>🔐 Expand Spring Boot 3 JWT Security Filter Chain &amp; RBAC Route Matrix</strong></summary>
+<br>
+
+| Stage / Endpoint | Component | Responsibility & Security Enforcement |
+| :--- | :--- | :--- |
+| `POST /api/v1/auth/register` · `/authenticate` | `AuthenticationController` · `AuthenticationService` | Hashes passwords with `BCryptPasswordEncoder`, authenticates via `DaoAuthenticationProvider`, revokes prior active tokens, and persists new `HS256` token row in MySQL. |
+| `Authorization: Bearer <jwt>` | `JwtAuthenticationFilter` (`OncePerRequestFilter`) | Extracts Bearer token, validates HMAC-SHA256 signature and expiration via `JwtService`, and queries `TokenRepository` (`!expired && !revoked`) before populating `SecurityContextHolder`. |
+| `POST /api/v1/auth/refresh-token` | `AuthenticationService#refreshToken` | Validates refresh token signature and issues a fresh access token without requiring user re-login. |
+| `POST /api/v1/auth/logout` | `LogoutService` (`LogoutHandler`) | Marks the stored MySQL token record `expired = true` and `revoked = true`, immediately invalidating subsequent replay attempts. |
+| `/api/v1/management/**` · `/api/v1/admin/**` | `SecurityConfiguration` + `@PreAuthorize` | Enforces fine-grained role (`ADMIN`, `MANAGER`, `USER`) and authority (`admin:read`, `admin:create`, `management:read`, etc.) guards at both URL and method levels. |
+
+</details>
+
+<a id="microservices-flow"></a>
+
+### Service discovery call path & animated execution flow
+
+<p align="center">
+  <img src="assets/images/microservices-execution-flow.gif" alt="Animated 5-stage Microservices execution flow: Registry Boot (:8070), Caller Hits Client (:8072), Eureka Service Discovery, Load-Balanced Ribbon Call, and Provider Response (:8071)." width="100%">
+</p>
 
 <p align="center">
   <img src="assets/architecture/micro-services.svg" alt="Caller hits hello-client, which looks up hello-server in Eureka, then calls it by service name." width="100%">
@@ -213,6 +239,18 @@ sequenceDiagram
     Server-->>Client: Hello-from-server
     Client-->>Caller: Hello-from-server
 ```
+
+<details>
+<summary><strong>🌐 Expand Microservices Topology, Ports &amp; Spring Cloud Discovery Mechanics</strong></summary>
+<br>
+
+| Service Module | Port | Spring Cloud Annotations | Runtime Role in Call Path |
+| :--- | :---: | :--- | :--- |
+| **`eureka-service`** | `:8070` | `@SpringBootApplication` · `@EnableEurekaServer` | Standalone Netflix Eureka registry (`registerWithEureka: false`, `fetchRegistry: false`); maintains live instance leases for registered services. |
+| **`hello-server`** | `:8071` | `@SpringBootApplication` · `@EnableDiscoveryClient` | Registers under logical application name `hello-server` with Eureka (`:8070/eureka`) and exposes `GET /rest/hello/server` returning `"Hello-from-server"`. |
+| **`hello-client`** | `:8072` | `@SpringBootApplication` · `@EnableDiscoveryClient` · `@LoadBalanced` | Exposes `GET /rest/hello/client`; injects a `@LoadBalanced RestTemplate` that resolves `http://hello-server/rest/hello/server` via Eureka + Ribbon without hardcoded IPs. |
+
+</details>
 
 ### VGG6 CNN architecture & animated execution flow
 

@@ -1,73 +1,109 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 620" width="1100" height="620" role="img" aria-labelledby="title desc">
   <title id="title">How sign-in and protected requests work</title>
-  <desc id="desc">A two-part guide: the user signs in and receives access and refresh tokens. Later, a request carrying the access token is checked for validity and revocation, then role permissions determine which endpoint can respond.</desc>
+  <desc id="desc">A two-part animated guide: the user signs in and receives access and refresh tokens. Later, a request carrying the access token is checked for validity and revocation, then role permissions determine which endpoint can respond.</desc>
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 10 5 0 10Z" fill="#55c9f2"/></marker>
     <marker id="arrowGold" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#f3bd67"/></marker>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3.5" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
     <style>
       text{font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
       .title{fill:#eff6ff;font-size:24px;font-weight:700}.sub{fill:#a9bfd3;font-size:14px}
       .section{fill:#7dd3fc;font-size:14px;font-weight:700;letter-spacing:1px}
-      .card{fill:#10243a;stroke:#294760;stroke-width:1.5}.auth{stroke:#38bdf8}.data{stroke:#f3bd67}.gate{stroke:#a78bfa}
-      .head{fill:#f1f5f9;font-size:15px;font-weight:700}.copy{fill:#afc0d2;font-size:12px}
+      .card{fill:#10243a;stroke:#294760;stroke-width:1.5}.auth{stroke:#38bdf8}.data{stroke:#f3bd67}.gate{stroke:#a78bfa}.ok{stroke:#34d399}
+      .head{fill:#f1f5f9;font-size:15px;font-weight:700}.copy{fill:#afc0d2;font-size:12px}.mono{fill:#7dd3fc;font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
       .step{fill:#07111f;font-size:12px;font-weight:700;text-anchor:middle}.num{fill:#55c9f2}
       .line{fill:none;stroke:#55c9f2;stroke-width:2.5;marker-end:url(#arrow)}
       .return{fill:none;stroke:#f3bd67;stroke-width:2;stroke-dasharray:7 6;marker-end:url(#arrowGold)}
     </style>
   </defs>
   <rect width="1100" height="620" rx="18" fill="#07111f"/>
-  <text x="36" y="44" class="title">From sign-in to a protected response</text>
-  <text x="36" y="70" class="sub">A quick visual guide to what happens when someone signs in and uses the app.</text>
+  <text x="36" y="44" class="title">Spring Boot 3 JWT Security — From Sign-In to Protected RBAC Response</text>
+  <text x="36" y="70" class="sub">Stateless HS256 JWT authentication with MySQL token revocation, refresh rotation, and method-level RBAC.</text>
 
-  <text x="36" y="119" class="section">1 · SIGN IN ONCE</text>
+  <text x="36" y="119" class="section">1 · SIGN IN ONCE &amp; ISSUE TOKENS (POST /api/v1/auth/authenticate)</text>
   <g>
     <rect x="36" y="140" width="210" height="86" rx="14" class="card auth"/>
     <circle cx="59" cy="163" r="13" class="num"/><text x="59" y="167" class="step">1</text>
     <text x="80" y="166" class="head">You sign in</text>
-    <text x="54" y="194" class="copy">Send your credentials to</text><text x="54" y="211" class="copy">the sign-in endpoint.</text>
+    <text x="54" y="192" class="copy">Send email &amp; password to</text><text x="54" y="210" class="mono">POST /api/v1/auth/*</text>
 
     <rect x="350" y="140" width="250" height="86" rx="14" class="card auth"/>
     <circle cx="373" cy="163" r="13" class="num"/><text x="373" y="167" class="step">2</text>
-    <text x="394" y="166" class="head">The app checks them</text>
-    <text x="368" y="194" class="copy">It verifies your account and</text><text x="368" y="211" class="copy">creates signed tokens.</text>
+    <text x="394" y="166" class="head">Verify &amp; mint JWTs</text>
+    <text x="368" y="192" class="copy">BCrypt verifies password; signs</text><text x="368" y="210" class="mono">HS256 Access + Refresh</text>
 
     <rect x="704" y="140" width="350" height="86" rx="14" class="card data"/>
     <circle cx="727" cy="163" r="13" fill="#f3bd67"/><text x="727" y="167" class="step">3</text>
-    <text x="748" y="166" class="head">You receive two tokens</text>
-    <text x="722" y="194" class="copy">Access token: send it with requests</text>
-    <text x="722" y="211" class="copy">Refresh token: renew access without signing in.</text>
-    <path d="M246 183H342" class="line"/><path d="M600 183H696" class="line"/><path d="M880 226V246H140V232" class="return"/>
+    <text x="748" y="166" class="head">Receive &amp; persist tokens</text>
+    <text x="722" y="192" class="copy">Access token: send in Bearer header</text>
+    <text x="722" y="210" class="copy">MySQL stores active token state for logout.</text>
+
+    <path d="M246 183H342" class="line"/>
+    <path d="M600 183H696" class="line"/>
+    <path d="M880 226V246H140V232" class="return"/>
+
+    <circle r="4.5" fill="#38bdf8" filter="url(#glow)">
+      <animateMotion dur="1.6s" repeatCount="indefinite" path="M246 183H342"/>
+    </circle>
+    <circle r="4.5" fill="#22d3ee" filter="url(#glow)">
+      <animateMotion dur="1.6s" begin="0.5s" repeatCount="indefinite" path="M600 183H696"/>
+    </circle>
+    <circle r="4.5" fill="#f3bd67" filter="url(#glow)">
+      <animateMotion dur="2.8s" begin="1.0s" repeatCount="indefinite" path="M880 226V246H140V232"/>
+    </circle>
   </g>
 
-  <text x="36" y="280" class="section">2 · EACH TIME YOU REQUEST A PROTECTED PAGE</text>
+  <text x="36" y="280" class="section">2 · EACH TIME YOU REQUEST A PROTECTED ENDPOINT (JwtAuthenticationFilter)</text>
   <g>
     <rect x="36" y="303" width="190" height="94" rx="14" class="card auth"/>
     <circle cx="59" cy="327" r="13" class="num"/><text x="59" y="331" class="step">4</text>
-    <text x="80" y="330" class="head">Send your request</text>
-    <text x="54" y="359" class="copy">The access token travels</text><text x="54" y="377" class="copy">with the request.</text>
+    <text x="80" y="330" class="head">Send Bearer JWT</text>
+    <text x="54" y="357" class="copy">Attach header:</text><text x="54" y="376" class="mono">Authorization: Bearer</text>
 
     <rect x="280" y="303" width="220" height="94" rx="14" class="card auth"/>
     <circle cx="303" cy="327" r="13" class="num"/><text x="303" y="331" class="step">5</text>
-    <text x="324" y="330" class="head">Check the token</text>
-    <text x="298" y="359" class="copy">Confirm it is genuine and</text><text x="298" y="377" class="copy">has not expired.</text>
+    <text x="324" y="330" class="head">Validate signature</text>
+    <text x="298" y="357" class="copy">JwtService parses claims</text><text x="298" y="376" class="copy">and checks expiration.</text>
 
     <rect x="554" y="303" width="220" height="94" rx="14" class="card data"/>
     <circle cx="577" cy="327" r="13" fill="#f3bd67"/><text x="577" y="331" class="step">6</text>
-    <text x="598" y="330" class="head">Check sign-in status</text>
-    <text x="572" y="359" class="copy">Look up the token record to</text><text x="572" y="377" class="copy">confirm it was not revoked.</text>
+    <text x="598" y="330" class="head">Check MySQL status</text>
+    <text x="572" y="357" class="copy">TokenRepository verifies</text><text x="572" y="376" class="mono">!expired &amp;&amp; !revoked</text>
 
     <rect x="828" y="303" width="226" height="94" rx="14" class="card gate"/>
     <circle cx="851" cy="327" r="13" fill="#c4b5fd"/><text x="851" y="331" class="step">7</text>
-    <text x="872" y="330" class="head">Check your role</text>
-    <text x="846" y="359" class="copy">Allow access only when your</text><text x="846" y="377" class="copy">role has the right permission.</text>
+    <text x="872" y="330" class="head">Enforce RBAC role</text>
+    <text x="846" y="357" class="copy">Route &amp; @PreAuthorize</text><text x="846" y="376" class="mono">ADMIN · MANAGER · USER</text>
 
-    <path d="M226 350H272" class="line"/><path d="M500 350H546" class="line"/><path d="M774 350H820" class="line"/>
+    <path d="M226 350H272" class="line"/>
+    <path d="M500 350H546" class="line"/>
+    <path d="M774 350H820" class="line"/>
+
+    <circle r="4.5" fill="#38bdf8" filter="url(#glow)">
+      <animateMotion dur="1.4s" repeatCount="indefinite" path="M226 350H272"/>
+    </circle>
+    <circle r="4.5" fill="#f3bd67" filter="url(#glow)">
+      <animateMotion dur="1.4s" begin="0.45s" repeatCount="indefinite" path="M500 350H546"/>
+    </circle>
+    <circle r="4.5" fill="#c4b5fd" filter="url(#glow)">
+      <animateMotion dur="1.4s" begin="0.9s" repeatCount="indefinite" path="M774 350H820"/>
+    </circle>
   </g>
 
   <path d="M941 397V435H490V452" class="line"/>
-  <rect x="270" y="452" width="440" height="76" rx="14" class="card auth"/>
-  <text x="490" y="481" class="head" text-anchor="middle">The right part of the app responds</text>
-  <text x="490" y="505" class="copy" text-anchor="middle">Regular pages · Manager tools · Admin tools</text>
-  <text x="36" y="572" class="sub">If a check fails, access is denied. Logging out revokes the token so it cannot be reused.</text>
-  <text x="36" y="596" fill="#6f879d" font-size="11">Project details: Spring Security · HS256 JWT · MySQL token records · USER / MANAGER / ADMIN</text>
+  <circle r="4.5" fill="#34d399" filter="url(#glow)">
+    <animateMotion dur="2.2s" begin="1.3s" repeatCount="indefinite" path="M941 397V435H490V452"/>
+  </circle>
+
+  <rect x="230" y="452" width="520" height="76" rx="14" class="card ok"/>
+  <text x="490" y="481" class="head" text-anchor="middle">200 OK — Protected Resource Responds According to Role</text>
+  <text x="490" y="505" class="copy" text-anchor="middle">/api/v1/demo-controller (USER) · /api/v1/management/** (MANAGER/ADMIN) · /api/v1/admin/** (ADMIN)</text>
+  <text x="36" y="572" class="sub">If any check fails, HTTP 401/403 is returned. Calling /api/v1/auth/logout marks the token revoked in MySQL.</text>
+  <text x="36" y="596" fill="#6f879d" font-size="11">Project details: Java 21 · Spring Boot 3 · Spring Security 6 · JJWT (HS256) · Spring Data JPA · MySQL · OpenAPI / Swagger UI</text>
 </svg>
