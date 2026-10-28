@@ -1,0 +1,196 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 660" width="1100" height="660" role="img" aria-labelledby="title desc">
+  <title id="title">VGG6 on CIFAR-10 Executive Analytical Report and Benchmark Dashboard</title>
+  <desc id="desc">Empirical benchmark comparing 6 activation functions, 6 optimizers, and 5 batch sizes on VGG6 CIFAR-10 in TensorFlow/Keras, highlighting GELU + Nadam achieving 88.94% validation accuracy and 88.45% test Top-1 accuracy.</desc>
+  <defs>
+    <linearGradient id="barBest" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#f3bd67"/>
+    </linearGradient>
+    <linearGradient id="barCyan" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0284c7"/>
+      <stop offset="100%" stop-color="#38bdf8"/>
+    </linearGradient>
+    <linearGradient id="barPurple" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#6d28d9"/>
+      <stop offset="100%" stop-color="#a78bfa"/>
+    </linearGradient>
+    <linearGradient id="barWarn" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#b45309"/>
+      <stop offset="100%" stop-color="#fbbf24"/>
+    </linearGradient>
+    <style>
+      text{font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+      .title{fill:#eff6ff;font-size:23px;font-weight:700}
+      .sub{fill:#94a3b8;font-size:13.5px}
+      .tag{fill:#38bdf8;font-size:12px;font-weight:700;letter-spacing:1.2px}
+      .card{fill:#0c1e33;stroke:#233f5d;stroke-width:1.5}
+      .kpi-best{fill:#0f293e;stroke:#34d399;stroke-width:1.8}
+      .kpi-gold{fill:#0f293e;stroke:#f3bd67;stroke-width:1.8}
+      .kpi-cyan{fill:#0f293e;stroke:#38bdf8;stroke-width:1.5}
+      .kpi-val{font-size:26px;font-weight:800;fill:#f8fafc}
+      .kpi-lbl{font-size:12px;font-weight:700;fill:#7dd3fc;letter-spacing:0.5px}
+      .kpi-sub{font-size:11.5px;fill:#94a3b8}
+      .panel-title{font-size:14.5px;font-weight:700;fill:#f1f5f9}
+      .panel-sub{font-size:11.5px;fill:#7dd3fc}
+      .row-lbl{font-size:12.5px;font-weight:600;fill:#e2e8f0}
+      .row-note{font-size:11px;fill:#94a3b8}
+      .pct-best{font-size:12.5px;font-weight:700;fill:#6ee7b7;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+      .pct{font-size:12px;font-weight:600;fill:#bae6fd;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+      .pct-low{font-size:12px;font-weight:600;fill:#fcd34d;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+      .track{fill:#071322}
+      .bar-anim{transform-origin:left center;animation:grow 1.4s cubic-bezier(0.22,1,0.36,1) forwards}
+      @keyframes grow{0%{transform:scaleX(0.15);opacity:0.4}100%{transform:scaleX(1);opacity:1}}
+    </style>
+  </defs>
+
+  <rect width="1100" height="660" rx="18" fill="#07111f"/>
+
+  <!-- Header -->
+  <text x="36" y="36" class="tag">ANALYTICAL BENCHMARK REPORT · IIT MADRAS CS6886W (SYSTEMS ENGINEERING FOR DEEP LEARNING)</text>
+  <text x="36" y="64" class="title">VGG6 on CIFAR-10 — Empirical Performance &amp; Hyperparameter Sensitivity</text>
+  <text x="36" y="86" class="sub">Controlled ablation across 6 activations, 6 optimizers, and 5 batch sizes (NVIDIA Tesla T4 GPU · Deterministic Seed = 42)</text>
+
+  <!-- 4 Executive KPI Cards -->
+  <g transform="translate(36, 104)">
+    <rect x="0" y="0" width="242" height="86" rx="12" class="kpi-best"/>
+    <text x="18" y="24" class="kpi-lbl">BEST VALIDATION ACCURACY</text>
+    <text x="18" y="56" class="kpi-val" fill="#6ee7b7">88.94%</text>
+    <text x="18" y="74" class="kpi-sub">GELU + Nadam (lr=1e-3, 80 epochs)</text>
+
+    <rect x="262" y="0" width="242" height="86" rx="12" class="kpi-gold"/>
+    <text x="280" y="24" class="kpi-lbl" fill="#fcd34d">HELD-OUT TEST TOP-1 ACC</text>
+    <text x="280" y="56" class="kpi-val" fill="#fde68a">88.45%</text>
+    <text x="280" y="74" class="kpi-sub">Test Loss: 0.358 · 10,000 unseen images</text>
+
+    <rect x="524" y="0" width="242" height="86" rx="12" class="kpi-cyan"/>
+    <text x="542" y="24" class="kpi-lbl">OPTIMIZATION GAIN</text>
+    <text x="542" y="56" class="kpi-val" fill="#7dd3fc">+7.04%</text>
+    <text x="542" y="74" class="kpi-sub">Nadam (88.94%) vs. Vanilla SGD (81.90%)</text>
+
+    <rect x="786" y="0" width="242" height="86" rx="12" class="kpi-cyan"/>
+    <text x="804" y="24" class="kpi-lbl">ACTIVATION GAIN</text>
+    <text x="804" y="56" class="kpi-val" fill="#c4b5fd">+20.54%</text>
+    <text x="804" y="74" class="kpi-sub">GELU (88.94%) vs. Sigmoid (68.40%)</text>
+  </g>
+
+  <!-- Left Panel: Activation Function Benchmark -->
+  <g transform="translate(36, 208)">
+    <rect x="0" y="0" width="504" height="292" rx="14" class="card"/>
+    <text x="20" y="28" class="panel-title">1 · Activation Function Ablation (with BatchNorm)</text>
+    <text x="20" y="46" class="panel-sub">Smooth non-monotonic gating (GELU/SiLU) prevents dead filters &amp; vanishing gradients</text>
+
+    <!-- Row 1: GELU (88.94%) -->
+    <text x="20" y="78" class="row-lbl">GELU ★</text>
+    <rect x="130" y="65" width="290" height="16" rx="6" class="track"/>
+    <rect x="130" y="65" width="258" height="16" rx="6" fill="url(#barBest)" class="bar-anim"/>
+    <text x="430" y="78" class="pct-best">88.94%</text>
+    <text x="130" y="94" class="row-note">Smooth x·Φ(x) gating preserves negative gradient flow</text>
+
+    <!-- Row 2: SiLU (88.40%) -->
+    <text x="20" y="116" class="row-lbl">SiLU (Swish)</text>
+    <rect x="130" y="103" width="290" height="16" rx="6" class="track"/>
+    <rect x="130" y="103" width="256" height="16" rx="6" fill="url(#barCyan)" class="bar-anim"/>
+    <text x="430" y="116" class="pct">88.40%</text>
+    <text x="130" y="132" class="row-note">Self-gated x·σ(x) with bounded negative trough</text>
+
+    <!-- Row 3: Leaky ReLU (87.90%) -->
+    <text x="20" y="154" class="row-lbl">Leaky ReLU</text>
+    <rect x="130" y="141" width="290" height="16" rx="6" class="track"/>
+    <rect x="130" y="141" width="255" height="16" rx="6" fill="url(#barCyan)" class="bar-anim"/>
+    <text x="430" y="154" class="pct">87.90%</text>
+    <text x="130" y="170" class="row-note">0.1 negative slope mitigates dying ReLU neurons</text>
+
+    <!-- Row 4: ReLU (87.62%) -->
+    <text x="20" y="192" class="row-lbl">ReLU</text>
+    <rect x="130" y="179" width="290" height="16" rx="6" class="track"/>
+    <rect x="130" y="179" width="254" height="16" rx="6" fill="url(#barCyan)" class="bar-anim"/>
+    <text x="430" y="192" class="pct">87.62%</text>
+    <text x="130" y="208" class="row-note">Fast positive gradient (f'=1), hard zeroing for x &lt; 0</text>
+
+    <!-- Row 5: Tanh (81.20%) -->
+    <text x="20" y="230" class="row-lbl">Tanh</text>
+    <rect x="130" y="217" width="290" height="16" rx="6" class="track"/>
+    <rect x="130" y="217" width="235" height="16" rx="6" fill="url(#barPurple)" class="bar-anim"/>
+    <text x="430" y="230" class="pct">81.20%</text>
+    <text x="130" y="246" class="row-note">Zero-centered (-1, 1), but tail saturation slows deep layers</text>
+
+    <!-- Row 6: Sigmoid (68.40%) -->
+    <text x="20" y="268" class="row-lbl">Sigmoid</text>
+    <rect x="130" y="255" width="290" height="16" rx="6" class="track"/>
+    <rect x="130" y="255" width="198" height="16" rx="6" fill="url(#barWarn)" class="bar-anim"/>
+    <text x="430" y="268" class="pct-low">68.40%</text>
+    <text x="130" y="284" class="row-note">Max derivative 0.25 across 6 layers → vanishing gradients</text>
+  </g>
+
+  <!-- Right Panel: Optimizer Benchmark -->
+  <g transform="translate(560, 208)">
+    <rect x="0" y="0" width="504" height="292" rx="14" class="card"/>
+    <text x="20" y="28" class="panel-title">2 · Optimizer Dynamics Ablation (80 Epochs + ReduceLROnPlateau)</text>
+    <text x="20" y="46" class="panel-sub">Combining adaptive 2nd-moment scaling with Nesterov look-ahead yields top accuracy</text>
+
+    <!-- Row 1: Nadam (88.94%) -->
+    <text x="20" y="78" class="row-lbl">Nadam ★</text>
+    <rect x="138" y="65" width="282" height="16" rx="6" class="track"/>
+    <rect x="138" y="65" width="251" height="16" rx="6" fill="url(#barBest)" class="bar-anim"/>
+    <text x="430" y="78" class="pct-best">88.94%</text>
+    <text x="138" y="94" class="row-note">lr=1e-3 · Adam 2nd-moment + Nesterov look-ahead momentum</text>
+
+    <!-- Row 2: Adam (88.35%) -->
+    <text x="20" y="116" class="row-lbl">Adam</text>
+    <rect x="138" y="103" width="282" height="16" rx="6" class="track"/>
+    <rect x="138" y="103" width="249" height="16" rx="6" fill="url(#barCyan)" class="bar-anim"/>
+    <text x="430" y="116" class="pct">88.35%</text>
+    <text x="138" y="132" class="row-note">lr=1e-3 · Bias-corrected 1st (m_t) &amp; 2nd (v_t) moment EMAs</text>
+
+    <!-- Row 3: Nesterov-SGD (88.10%) -->
+    <text x="20" y="154" class="row-lbl">Nesterov-SGD</text>
+    <rect x="138" y="141" width="282" height="16" rx="6" class="track"/>
+    <rect x="138" y="141" width="248" height="16" rx="6" fill="url(#barCyan)" class="bar-anim"/>
+    <text x="430" y="154" class="pct">88.10%</text>
+    <text x="138" y="170" class="row-note">lr=1e-2 (μ=0.9) · Look-ahead step damps ravine oscillations</text>
+
+    <!-- Row 4: RMSprop (86.75%) -->
+    <text x="20" y="192" class="row-lbl">RMSprop</text>
+    <rect x="138" y="179" width="282" height="16" rx="6" class="track"/>
+    <rect x="138" y="179" width="244" height="16" rx="6" fill="url(#barCyan)" class="bar-anim"/>
+    <text x="430" y="192" class="pct">86.75%</text>
+    <text x="138" y="208" class="row-note">lr=1e-3 · Decaying average of squared gradients</text>
+
+    <!-- Row 5: Standard SGD (81.90%) -->
+    <text x="20" y="230" class="row-lbl">Standard SGD</text>
+    <rect x="138" y="217" width="282" height="16" rx="6" class="track"/>
+    <rect x="138" y="217" width="231" height="16" rx="6" fill="url(#barPurple)" class="bar-anim"/>
+    <text x="430" y="230" class="pct">81.90%</text>
+    <text x="138" y="246" class="row-note">lr=1e-2 (μ=0.0) · Slow along flat directions, oscillates in canyons</text>
+
+    <!-- Row 6: Adagrad (74.80%) -->
+    <text x="20" y="268" class="row-lbl">Adagrad</text>
+    <rect x="138" y="255" width="282" height="16" rx="6" class="track"/>
+    <rect x="138" y="255" width="211" height="16" rx="6" fill="url(#barWarn)" class="bar-anim"/>
+    <text x="430" y="268" class="pct-low">74.80%</text>
+    <text x="138" y="284" class="row-note">lr=1e-2 · Monotonic G_t sum shrinks effective LR prematurely</text>
+  </g>
+
+  <!-- Bottom Systems Trade-Off Strip: Batch Size & Convergence Trajectory -->
+  <g transform="translate(36, 516)">
+    <rect x="0" y="0" width="1028" height="122" rx="14" class="card"/>
+    <text x="20" y="26" class="panel-title">3 · Systems Throughput vs. Generalization Trade-Off (Batch Size, Learning Rate &amp; Epoch Scaling)</text>
+
+    <!-- 3 mini analytical callout boxes inside bottom panel -->
+    <rect x="20" y="40" width="320" height="68" rx="10" fill="#081526" stroke="#1e3a56"/>
+    <text x="34" y="60" fill="#38bdf8" font-size="12" font-weight="700">BATCH SIZE SWEET SPOT: 128 (352 steps/ep)</text>
+    <text x="34" y="78" fill="#cbd5e1" font-size="11.5">BS 32/64 (~88.3%): high noise, lower GPU util.</text>
+    <text x="34" y="95" fill="#cbd5e1" font-size="11.5">BS 128 (88.94% ★) vs. BS 512 (85.6%, sharp minima).</text>
+
+    <rect x="354" y="40" width="320" height="68" rx="10" fill="#081526" stroke="#1e3a56"/>
+    <text x="368" y="60" fill="#f3bd67" font-size="12" font-weight="700">LEARNING RATE SCHEDULE (1e-3 → 1e-6)</text>
+    <text x="368" y="78" fill="#cbd5e1" font-size="11.5">LR 1e-2 (Adam/Nadam) overshoots narrow valleys;</text>
+    <text x="368" y="95" fill="#cbd5e1" font-size="11.5">LR 1e-4 underfits (~79.5%). ReduceLROnPlateau optimal.</text>
+
+    <rect x="688" y="40" width="320" height="68" rx="10" fill="#081526" stroke="#1e3a56"/>
+    <text x="702" y="60" fill="#34d399" font-size="12" font-weight="700">CONVERGENCE &amp; REGULARIZATION (80 EPOCHS)</text>
+    <text x="702" y="78" fill="#cbd5e1" font-size="11.5">Ep 10: 83.5% → Ep 20: 85.4% → Ep 80: 88.94% Val.</text>
+    <text x="702" y="95" fill="#cbd5e1" font-size="11.5">Dropout(0.2/0.3) + L2(1e-4) curb overfitting.</text>
+  </g>
+</svg>
+

@@ -1,9 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 580" width="1100" height="580" role="img" aria-labelledby="title desc">
-  <title id="title">VGG6 on CIFAR-10 architecture and training pipeline</title>
+  <title id="title">VGG6 on CIFAR-10 architecture and animated training pipeline</title>
   <desc id="desc">Six-stage visual guide to the VGG6 Convolutional Neural Network on CIFAR-10: input normalization and augmentation, two convolutional blocks (64 and 128 filters), dense classifier head (8192 to 256 to 10 classes), and Nadam + Weights &amp; Biases hyperparameter optimization achieving 88.94% validation and 88.45% test accuracy.</desc>
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 10 5 0 10Z" fill="#55c9f2"/></marker>
     <marker id="arrowGold" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#f3bd67"/></marker>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3.5" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
     <style>
       text{font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
       .title{fill:#eff6ff;font-size:24px;font-weight:700}.sub{fill:#a9bfd3;font-size:14px}
@@ -13,6 +20,8 @@
       .step{fill:#07111f;font-size:12px;font-weight:700;text-anchor:middle}.num{fill:#55c9f2}
       .line{fill:none;stroke:#55c9f2;stroke-width:2.5;marker-end:url(#arrow)}
       .feedback{fill:none;stroke:#f3bd67;stroke-width:2;stroke-dasharray:7 6;marker-end:url(#arrowGold)}
+      .pulse{animation:pulse 2.6s ease-in-out infinite}
+      @keyframes pulse{0%,100%{opacity:0.5}50%{opacity:1}}
     </style>
   </defs>
   <rect width="1100" height="580" rx="18" fill="#07111f"/>
@@ -44,6 +53,12 @@
 
     <path d="M336 188H392" class="line"/>
     <path d="M700 188H756" class="line"/>
+    <circle r="4.5" fill="#38bdf8" filter="url(#glow)">
+      <animateMotion dur="1.8s" repeatCount="indefinite" path="M336 188H392"/>
+    </circle>
+    <circle r="4.5" fill="#22d3ee" filter="url(#glow)">
+      <animateMotion dur="1.8s" begin="0.6s" repeatCount="indefinite" path="M700 188H756"/>
+    </circle>
   </g>
 
   <text x="36" y="286" class="section">2 · CLASSIFIER HEAD (2 WEIGHT LAYERS), OPTIMIZATION &amp; EVALUATION</text>
@@ -72,6 +87,16 @@
     <path d="M914 240V268H186V298" class="line"/>
     <path d="M336 358H392" class="line"/>
     <path d="M764 358H708" class="feedback"/>
+
+    <circle r="4.5" fill="#c4b5fd" filter="url(#glow)">
+      <animateMotion dur="2.8s" begin="1.1s" repeatCount="indefinite" path="M914 240V268H186V298"/>
+    </circle>
+    <circle r="4.5" fill="#34d399" filter="url(#glow)">
+      <animateMotion dur="1.8s" begin="1.4s" repeatCount="indefinite" path="M336 358H392"/>
+    </circle>
+    <circle r="4.5" fill="#f3bd67" filter="url(#glow)">
+      <animateMotion dur="1.8s" begin="0.3s" repeatCount="indefinite" path="M764 358H708"/>
+    </circle>
   </g>
 
   <rect x="210" y="442" width="680" height="68" rx="14" class="card conv"/>
@@ -81,4 +106,3 @@
   <text x="36" y="542" class="sub">Best config: GELU + Nadam (1e-3) + BatchNorm + Dropout(0.2/0.3) + L2(1e-4) achieves 88.94% val / 88.45% test accuracy.</text>
   <text x="36" y="564" fill="#6f879d" font-size="11">Project details: IIT Madras CS6886W · Python 3.10+ · TensorFlow 2.15+ / Keras · Weights &amp; Biases · NumPy · Matplotlib</text>
 </svg>
-

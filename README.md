@@ -140,9 +140,9 @@ Click a card to open the repository or live product.
       </a>
       <br>
       <strong>VGG6 CNN on CIFAR-10 (IITM CS6886W)</strong><br>
-      Modular 6-layer CNN in TensorFlow/Keras with channel-wise Z-score standardization, data augmentation, and W&amp;B sweeps across 6 activations and 6 optimizers (88.94% val / 88.45% test accuracy).<br>
+      Modular 6-layer CNN in TensorFlow/Keras with channel-wise Z-score standardization, data augmentation, and W&amp;B sweeps across 6 activations and 6 optimizers (<strong>88.94% val / 88.45% test accuracy</strong>).<br>
       <code>Python</code> <code>TensorFlow / Keras</code> <code>VGG6 CNN</code> <code>W&amp;B</code> <code>CIFAR-10</code><br>
-      <a href="https://github.com/Rakesh4ever/iitm-cs6886w-vgg6-cifar10">View repository →</a>
+      <a href="https://github.com/Rakesh4ever/iitm-cs6886w-vgg6-cifar10">View repository →</a> · <a href="#vgg6-analytical-report">Analytical report ↓</a> · <a href="https://github.com/Rakesh4ever/iitm-cs6886w-vgg6-cifar10/blob/main/cs25m530_Rakesh_Kumar.pdf">Report PDF →</a>
     </td>
   </tr>
   <tr>
@@ -214,7 +214,11 @@ sequenceDiagram
     Client-->>Caller: Hello-from-server
 ```
 
-### VGG6 CNN architecture & training pipeline
+### VGG6 CNN architecture & animated execution flow
+
+<p align="center">
+  <img src="assets/images/vgg6-execution-flow.gif" alt="Animated 5-stage VGG6 execution flow: Data & Z-Score Normalization, Conv Backbone (4 Conv2D layers), Classifier Head (2 Dense layers), Nadam + W&B Bayesian Sweeps (88.94% Val Acc), and Standalone Test Evaluation (88.45% Test Top-1 Acc)." width="100%">
+</p>
 
 <p align="center">
   <img src="assets/architecture/vgg6-cifar10.svg" alt="Six-stage diagram of the VGG6 CNN on CIFAR-10: Z-score normalization and augmentation, Conv Block 1 (64 filters), Conv Block 2 (128 filters), Flatten + Dense(256) classifier head, Dense(10, Softmax) output, and Nadam + W&B hyperparameter optimization." width="100%">
@@ -231,6 +235,62 @@ flowchart LR
     W -. tunes & logs .-> D
     W -. tunes & logs .-> E
 ```
+
+---
+
+<a id="vgg6-analytical-report"></a>
+
+## Deep Learning Analytical Report — VGG6 on CIFAR-10 (IITM CS6886W)
+
+Empirical systems & hyperparameter study from [`iitm-cs6886w-vgg6-cifar10`](https://github.com/Rakesh4ever/iitm-cs6886w-vgg6-cifar10) ([Full Report PDF](https://github.com/Rakesh4ever/iitm-cs6886w-vgg6-cifar10/blob/main/cs25m530_Rakesh_Kumar.pdf)). Built as an importable Python package (`src/dataset.py`, `src/model.py`, `src/train.py`, `src/evaluate.py`, `src/sweep.py`) with deterministic seeding (`seed = 42`) on an NVIDIA Tesla T4 GPU.
+
+<p align="center">
+  <img src="assets/architecture/vgg6-analytical-report.svg" alt="VGG6 on CIFAR-10 Executive Analytical Benchmark Dashboard comparing 6 activations, 6 optimizers, and batch size scaling." width="100%">
+</p>
+
+### Executive Summary & Best Verified Configuration
+
+| Metric / Parameter | Verified Value | Engineering Rationale |
+| :--- | :--- | :--- |
+| **Best Validation Accuracy** | **88.94%** | Achieved on 5,000 held-out validation images (`Epoch 80`, `seed = 42`) |
+| **Held-Out Test Top-1 Accuracy** | **88.45%** (`loss = 0.358`) | Standalone evaluation via `python -m src.evaluate` on 10,000 unseen test images |
+| **Architecture (6 Weight Layers)** | `4 Conv2D + 2 Dense` | Block 1 (`2×64`), Block 2 (`2×128`), Classifier (`8192 → 256 → 10 Softmax`) |
+| **Optimal Activation** | `GELU` (**+20.54%** over `Sigmoid`) | Smooth probabilistic gating (`x · Φ(x)`) prevents dead neurons & vanishing gradients |
+| **Optimal Optimizer** | `Nadam` (`lr = 1e-3`) | Combines Adam's 2nd-moment scaling with Nesterov look-ahead momentum (**+7.04%** over `SGD`) |
+| **Batch Size & LR Schedule** | `128` (`352` steps/epoch) | Balances GPU throughput and stochastic gradient noise with `ReduceLROnPlateau (0.5×)` |
+| **Regularization Pipeline** | `BatchNorm` + `Dropout(0.2/0.3)` + `L2(1e-4)` | Coupled with `ReflectPad(4) → RandomCrop(32×32) → HorizontalFlip` to curb overfitting |
+
+<details>
+<summary><strong>📊 Expand Full Comparative Ablation Tables (Activations · Optimizers · Systems Scaling)</strong></summary>
+<br>
+
+#### 1. Activation Function Ablation (`BatchNorm = True`)
+
+| Activation | Val Accuracy | Convergence Behavior & Mathematical Explanation |
+| :--- | :---: | :--- |
+| **GELU** ★ | **88.94%** | Smooth, non-monotonic gating (`x · Φ(x)`) permits small negative gradients for slightly negative inputs, preventing dead filters and smoothing the loss landscape. |
+| **SiLU (Swish)** | **88.40%** | Smooth self-gated activation (`x · σ(x)`) with a bounded negative trough; closely matches GELU in convergence speed and generalization. |
+| **Leaky ReLU** | **87.90%** | Retains a `0.1` slope for negative inputs, mitigating dying ReLU while preserving piecewise-linear speed. |
+| **ReLU** | **87.62%** | Non-saturating positive gradient (`f'(x) = 1` for `x > 0`), but hard zeroing for `x < 0` causes a subset of filters to suffer from dying neurons. |
+| **Tanh** | **81.20%** | Zero-centered output in `(-1, 1)` aids layer conditioning, but saturates at both tails (`f'(x) = 1 - tanh²(x) → 0`), slowing deeper gradient flow. |
+| **Sigmoid** | **68.40%** | Non-zero-centered `(0, 1)` output induces zig-zag weight updates and its maximum derivative is `0.25`, causing severe vanishing gradients across 6 layers (`<25%` without BatchNorm). |
+
+#### 2. Optimizer Dynamics Ablation (`80 Epochs`)
+
+| Optimizer | Best LR | Val Accuracy | Optimization & Convergence Dynamics |
+| :--- | :---: | :---: | :--- |
+| **Nadam** ★ | `1e-3` | **88.94%** | Combines Adam's per-parameter second-moment scaling with **Nesterov look-ahead momentum**, yielding the fastest early convergence and highest final accuracy. |
+| **Adam** | `1e-3` | **88.35%** | Bias-corrected exponential moving averages of first (`m_t`) and second (`v_t`) gradient moments provide rapid, stable convergence. |
+| **Nesterov-SGD** | `1e-2` (`μ=0.9`) | **88.10%** | Evaluates gradients at the projected look-ahead position (`θ + μ·v_t`), damping oscillations in high-curvature ravines. |
+| **RMSprop** | `1e-3` | **86.75%** | Normalizes updates by an exponentially decaying average of squared gradients, controlling oscillations without premature stalling. |
+| **Standard SGD** | `1e-2` (`μ=0.0`) | **81.90%** | Updates strictly along noisy instantaneous mini-batch gradients; progresses slowly along flat directions and oscillates across steep canyon walls. |
+| **Adagrad** | `1e-2` | **74.80%** | Accumulates squared gradients monotonically in the denominator (`G_t = G_{t-1} + g_t²`), shrinking the effective learning rate toward zero prematurely. |
+
+#### 3. Systems Throughput vs. Generalization (`Batch Size`, `Learning Rate`, `Epochs`)
+- **Batch Size (`32, 64, 128, 256, 512`)**: Small batches (`32, 64` → `~88.3%`) inject beneficial stochastic gradient noise (`1,406` and `703` steps/epoch) at the cost of lower GPU utilization; **Batch Size `128` (`352` steps/epoch → `88.94%`)** achieves the optimal trade-off between NVIDIA T4 throughput and flat-minima generalization; large batches (`256, 512` → `~85.6%`) perform only `88` steps/epoch at `bs=512` and converge toward sharper minima.
+- **Learning Rate (`1e-4` to `1e-2`)**: `1e-3` (with `ReduceLROnPlateau` halving LR on 5-epoch plateaus down to `1e-6`) enables fast initial descent in the first 20 epochs (`~85.4%`) followed by fine-grained convergence (`88.94%` at 80 epochs).
+
+</details>
 
 ---
 
